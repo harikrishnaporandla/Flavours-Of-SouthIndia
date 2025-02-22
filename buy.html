@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buy Now</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+
+    h1 {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 2.5em;
+      color: #444;
+    }
+
+    .buy-container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .buy-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      padding: 15px;
+      border-bottom: 1px solid #ddd;
+      background-color: #fafafa;
+      border-radius: 5px;
+    }
+
+    .buy-item img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      margin-right: 20px;
+      border-radius: 5px;
+    }
+
+    .buy-item-details {
+      flex-grow: 1;
+    }
+
+    .buy-item-details h3 {
+      font-size: 1.5em;
+      margin: 0;
+      color: #555;
+    }
+
+    .buy-item-details p {
+      margin: 5px 0;
+      font-size: 1em;
+      color: #777;
+    }
+
+    .buy-item-price {
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #000;
+    }
+
+    .total-price {
+      text-align: right;
+      font-size: 1.5em;
+      font-weight: bold;
+      margin-top: 20px;
+      color: #000;
+    }
+
+    .checkout-button {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      margin: 20px 0;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1.1em;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .checkout-button:hover {
+      background-color: #218838;
+    }
+
+    .back-button {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      margin: 10px 0;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 1.1em;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .back-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>Buy Now</h1>
+  <div class="buy-container" id="buy-items-container">
+    <!-- Items and total price will be displayed here -->
+  </div>
+
+  <script>
+    function displayItems() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const itemsParam = urlParams.get('items');
+      const items = JSON.parse(decodeURIComponent(itemsParam));
+
+      const container = document.getElementById('buy-items-container');
+      container.innerHTML = ""; // Clear the container before rendering
+
+      let totalPrice = 0;
+
+      items.forEach((item, index) => {
+        const itemDiv = document.createElement('div');
+        itemDiv.classList.add('buy-item');
+
+        itemDiv.innerHTML = `
+          <img src="${item.image}" alt="${item.name}">
+          <div class="buy-item-details">
+            <h3>${item.name}</h3>
+            <p class="buy-item-price">Price: $${item.price}</p>
+          </div>
+        `;
+
+        container.appendChild(itemDiv);
+        totalPrice += parseFloat(item.price);
+      });
+
+      // Display total price
+      const totalDiv = document.createElement('div');
+      totalDiv.classList.add('total-price');
+      totalDiv.innerHTML = `Total Price: $${totalPrice.toFixed(2)}`;
+      container.appendChild(totalDiv);
+
+      // Add checkout and back buttons
+      const checkoutButton = document.createElement('button');
+      checkoutButton.classList.add('checkout-button');
+      checkoutButton.textContent = 'Proceed to Checkout';
+      checkoutButton.onclick = () => proceedToCheckout(items);
+      container.appendChild(checkoutButton);
+
+      const backButton = document.createElement('button');
+      backButton.classList.add('back-button');
+      backButton.textContent = 'Back to Cart';
+      backButton.onclick = () => window.location.href = 'cart.html';
+      container.appendChild(backButton);
+    }
+
+    function proceedToCheckout(items) {
+      // Here you can redirect to a checkout page or handle the checkout process
+      alert(`Proceeding to checkout for ${items.length} items. Total: $${items.reduce((sum, item) => sum + parseFloat(item.price), 0).toFixed(2)}`);
+      // window.location.href = `checkout.html?items=${encodeURIComponent(JSON.stringify(items))}`;
+    }
+
+    displayItems();
+  </script>
+</body>
+</html>
